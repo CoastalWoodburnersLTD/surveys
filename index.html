@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coastal Woodburners Survey</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #0d3b2e;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      background-color: #0d3b2e;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .confirmation {
+      margin-top: 15px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="logo.png" alt="Coastal Woodburners Logo" style="width:150px; display:block; margin:auto;">
+    <h1>Survey Form</h1>
+    <form id="surveyForm" action="https://formsubmit.co/coastalwoodburners@gmail.com" method="POST" enctype="multipart/form-data">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="javascript:confirmation()">
+
+      <label for="name">Name</label>
+      <input type="text" name="Name" id="name" required />
+
+      <label for="phone">Phone</label>
+      <input type="tel" name="Phone" id="phone" required />
+
+      <label for="email">Email</label>
+      <input type="email" name="Email" id="email" required />
+
+      <label for="address">Address</label>
+      <textarea name="Address" id="address" required></textarea>
+
+      <label for="install">Installation Type</label>
+      <select name="Installation Type" id="install" required>
+        <option value="Free Standing">Free Standing</option>
+        <option value="Existing Fireplace">Existing Fireplace</option>
+        <option value="KO & Rebuild">KO & Rebuild</option>
+        <option value="Liner Only">Liner Only</option>
+        <option value="Repairs">Repairs</option>
+      </select>
+
+      <label for="stove">Stove Make & Model (Repairs only)</label>
+      <input type="text" name="Stove Model" id="stove" />
+
+      <label for="appliance">New Appliance Required</label>
+      <input type="text" name="Appliance Required" id="appliance" />
+
+      <label for="flue">Flue Type & Parts Required</label>
+      <input type="text" name="Flue Type" id="flue" />
+
+      <label for="hearth">Hearth Info</label>
+      <textarea name="Hearth Info" id="hearth"></textarea>
+
+      <label for="additional">Additional Features (Beams, Tiles, Surround, etc)</label>
+      <input type="text" name="Additional Features" id="additional" />
+
+      <label for="building">Building Works Required</label>
+      <input type="text" name="Building Works" id="building" />
+
+      <label for="notes">Description / Additional Information</label>
+      <textarea name="Notes" id="notes"></textarea>
+
+      <label for="images">Upload Images</label>
+      <input type="file" name="Images" id="images" accept="image/*" multiple />
+
+      <button type="submit">Submit Survey</button>
+      <button type="button" onclick="downloadCSV()" style="margin-left: 10px; background: #777;">Store on Device</button>
+    </form>
+    <div class="confirmation" id="confirmation">✔ Survey submitted successfully!</div>
+  </div>
+
+  <script>
+    function confirmation() {
+      document.getElementById("confirmation").style.display = "block";
+    }
+
+    function downloadCSV() {
+      const form = document.getElementById("surveyForm");
+      const formData = new FormData(form);
+      const entries = [...formData.entries()].filter(entry => entry[0] !== "Images");
+      const headers = entries.map(entry => entry[0]).join(",");
+      const values = entries.map(entry => '"' + entry[1].replace(/"/g, '""') + '"').join(",");
+      const csvContent = headers + "\n" + values;
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", "survey_entry.csv");
+      link.click();
+    }
+  </script>
+</body>
+</html>
